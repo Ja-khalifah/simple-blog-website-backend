@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+// const authRoutes = require('../routes/auth.routes');
 
 const app = express();
 
 var corsOptions = {
-    origin: 'http://localhost:8080'
-    // origin: 'https://codetechweb.com'
+    origin: 'http://127.0.0.1:4800'
 }
 
 app.use(cors(corsOptions));
@@ -18,17 +18,23 @@ app.use(bodyParser.json());
 const db = require("./app/model");
 const Role = db.role;
 
-// db.sequelize.sync();
+db.sequelize.sync();
 //force: true. it will drop the table if it already exists
-db.sequelize.sync({force: true}).then(() =>{
-    console.log('Drop and Resync Database with {force: true}');
-    initial();
+// db.sequelize.sync({force: true}).then(() =>{
+//     console.log('Drop and Resync Database with {force: true}');
+//     initial();
+// });
+
+//routes
+app.get("/", (req, res) => {
+    res.send("Welcome to a simple blog website");
 });
 
-//route
-app.get("/", (req, res) => {
-    res.json({message: "Welcome to codetech blog"});
-});
+require('./app/routes/auth.routes')(app);
+require('./app/routes/category.routes')(app);
+require('./app/routes/page.routes')(app);
+require('./app/routes/post.routes')(app);
+require('./app/routes/comment.routes')(app);
 
 //set port, listen to requests
 const PORT = process.env.PORT || 4800;
@@ -39,7 +45,7 @@ app.listen(PORT, () => {
 function initial(){
     Role.create({
         id: 1,
-        name: "user"
+        name: "editor"
     });
     Role.create({
         id: 2,

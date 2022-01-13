@@ -4,8 +4,7 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
     config.DB,
     config.USER,
-    config.PASSWORD,
-    {
+    config.PASSWORD, {
         host: config.HOST,
         dialect: config.dialect,
         operatorAliases: false,
@@ -13,7 +12,7 @@ const sequelize = new Sequelize(
         pool: {
             max: config.pool.max,
             min: config.pool.min,
-            aquire: config.pool.acquire,
+            acquire: config.pool.acquire,
             idle: config.pool.idle
         }
     }
@@ -21,7 +20,7 @@ const sequelize = new Sequelize(
 
 const db = {}
 
-db.Sequelize =  Sequelize;
+db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require("./user.model.js")(sequelize, Sequelize);
@@ -32,7 +31,7 @@ db.post = require("./post.model.js")(sequelize, Sequelize);
 db.comment = require("./comment.model.js")(sequelize, Sequelize);
 
 /**
- * many to may relationship between users and roles table
+ * many to many relationship between users and roles table
  * 1. users
  * 2. roles
  * 3. user_roles
